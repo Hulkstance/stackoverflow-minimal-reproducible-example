@@ -1,0 +1,34 @@
+﻿// WARNING: DO NOT PUBLISH!
+//
+// Extension to WebAPI protocol: diagnostic session token added to each server message.
+//
+// WebAPI server guarantees that all server messages sent in one WebSocket connection
+// belong to the same session identified by session token in the LogonResult message.
+// WebAPI server does not allow to start another session in the same WebSocket connection.
+//
+// Practically speaking, there is no need in adding session token to each server message.
+// Client application can keep the session token from LogonResult message and associate it
+// with each server message received from the same WebSocket connection.
+//
+// However, for additional diagnostics client application may request adding session token
+// to each server message. To do that, it should set include_diagnostic_session_token = true
+// in the Logon message extension.
+syntax = "proto2";
+package diagnostic_session_token_2;
+option csharp_namespace = "CqgWebApi.DiagnosticSessionToken";
+
+import "Proto/WebAPI/user_session_2.proto";
+import "Proto/WebAPI/webapi_2.proto";
+
+extend user_session_2.Logon
+{
+  // Specifies if session token should be included into each server message after logon.
+  optional bool include_diagnostic_session_token = 300;
+}
+
+extend WebAPI_2.ServerMsg
+{
+  // Session token for diagnostic purposes.
+  // It is added to each server message and it equals to session_token in the LogonResult message.
+  optional string diagnostic_session_token = 300;
+}

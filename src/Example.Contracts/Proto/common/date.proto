@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+package rjo;
+option csharp_namespace = "CqgWebApi.Date";
+
+message Date{
+	uint32 day = 1;
+	uint32 month = 2;
+	uint32 year = 3;
+}
