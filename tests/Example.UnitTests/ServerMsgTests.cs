@@ -12,7 +12,7 @@ public class ServerMsgTests
     public void GivenServerMsgWithDiagnosticSessionToken_WhenSerializedAndDeserialized_ShouldContainToken()
     {
         // Arrange
-        var expectedToken = "test_token";
+        const string expectedToken = "test_token";
         var serverMsg = new ServerMsg();
         serverMsg.SetExtension(DiagnosticSessionToken2Extensions.DiagnosticSessionToken, expectedToken);
 
@@ -25,8 +25,8 @@ public class ServerMsgTests
         }
 
         // Act
-        var deserializedServerMsg = ServerMsg.Parser.ParseFrom(serializedData);
-        var actualToken = deserializedServerMsg.GetExtension(DiagnosticSessionToken2Extensions.DiagnosticSessionToken);
+        var parsedServerMsg = ServerMsg.Parser.WithExtensionRegistry([DiagnosticSessionToken2Extensions.DiagnosticSessionToken]).ParseFrom(serializedData);
+        var actualToken = parsedServerMsg.GetExtension(DiagnosticSessionToken2Extensions.DiagnosticSessionToken);
 
         // Assert
         actualToken.Should().Be(expectedToken);
